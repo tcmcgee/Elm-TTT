@@ -4,9 +4,9 @@ import Test exposing (..)
 import Board exposing(..)
 import UI exposing(..)
 import Expect
-import Array exposing(fromList)
+import Array exposing(fromList, set)
 import String
-import Html exposing (button, text)
+import Html exposing (button, text, div)
 import Html.Events exposing (onClick)
 gameState =
   { board = fromList ["","","","","","","","",""] }
@@ -70,4 +70,14 @@ all =
            \() ->
              Expect.equal (getButtonForIndex 1 (fromList ["","","","","","","","",""])) (button [onClick 1] [text ""])
 
+        , test "gets the turns text for an empty board" <|
+           \() ->
+             Expect.equal (getTurnText emptyBoard) "X's Turn!"
+
+        , test "gets the turns text for an empty board" <|
+           \() ->
+             Expect.equal (getTurnText (set 0 "X" emptyBoard)) "O's Turn!"
+        -- , test "get game returns an html representation of the game" <|
+        --    \() ->
+        --     Expect.equal (getGame gameState)
       ]
