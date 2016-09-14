@@ -3,7 +3,6 @@ import Html exposing (table, button, text, tr, td, div)
 import Html.Attributes exposing(disabled, height, width, attribute)
 import Html.Events exposing (onClick)
 import Array exposing (fromList, get, indexedMap)
-import Board exposing (..)
 
 import Board exposing (..)
 
@@ -12,7 +11,7 @@ getButtonForIndex index board =
 
 
 getTurnText board =
-  if (countOccupiedSpaces board) % 2 == 0 then "X's Turn!" else "O's Turn!"
+  (getMarker ({getGameState | board = board})) ++ "'s Turn!"
 
 getGame {board} =
   div [attribute "margin-left" "auto", attribute "margin-right" "auto", attribute "align" "center"]

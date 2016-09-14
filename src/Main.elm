@@ -17,6 +17,6 @@ view model =
 
 update msg model =
      if msg == -1  then
-       {model | board = (fromList ["","","","","","","","",""])}
+       getGameState
       else
         {model | board = (makeMove model msg (getMarker model))}
