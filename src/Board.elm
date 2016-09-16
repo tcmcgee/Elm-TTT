@@ -9,7 +9,7 @@ makeMove {board} move marker =
   set move marker board
 
 countOccupiedSpaces board =
-  (length (filter (\x -> x /= "") board))
+  length (filter (\x -> x /= "") board)
 
 getMarkerAt index board =
   Maybe.withDefault "" (get index board)

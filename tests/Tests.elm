@@ -3,6 +3,7 @@ module Tests exposing (..)
 import Test exposing (..)
 import Board exposing(..)
 import UI exposing(..)
+import HttpClient exposing (..)
 import Expect
 import Array exposing(fromList, set)
 import String
@@ -80,4 +81,12 @@ all =
         -- , test "get game returns an html representation of the game" <|
         --    \() ->
         --     Expect.equal (getGame gameState)
+        --- End UI
+        --- HttpClient
+        , test "gets the url with the board as a param" <|
+           \() ->
+             Expect.equal (getURLWithParams "http://myUrl.com/status" ["","","","","","","","",""]) "http://myUrl.com/status?board=[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        , test "sends a get request" <|
+           \() ->
+             Expect.equal (sendGetRequest "https://stormy-savannah-24890.herokuapp.com/api/status" ["","","","","","","","",""]) "123"
       ]
