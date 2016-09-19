@@ -14,7 +14,7 @@ main =
 
 
 view model =
-  (getGame model)
+  (getGame model (getGameStatus model.board))
 
 update msg model =
      if msg == -1  then
