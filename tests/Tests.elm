@@ -118,9 +118,44 @@ all =
            \() ->
              Expect.equal (getTurnText emptyBoard "in progress") "X's Turn!"
 
-        , test "gets the turns text for an empty board" <|
+        , test "gets the turns text for a non-empty board" <|
            \() ->
              Expect.equal (getTurnText (set 0 "X" emptyBoard) "in progress") "O's Turn!"
+
+        , test "gets the turns text when X wins" <|
+           \() ->
+             Expect.equal (getTurnText gameState.board "player1Wins") "X Wins!!"
+
+        , test "gets the turns text when O wins" <|
+           \() ->
+             Expect.equal (getTurnText gameState.board "player2Wins") "O Wins!!"
+
+        , test "gets the turns text when there's a tie" <|
+           \() ->
+             Expect.equal (getTurnText gameState.board "tie") "Game Over, It's a Tie!"
+
+        , test "Gets the display board of an empty board and an in progress game" <|
+           \() ->
+             Expect.equal (getDisplayBoard gameState.board "in progress") gameState.board
+
+        , test "Gets the display board of a game that has a winner" <|
+           \() ->
+             Expect.equal (getDisplayBoard gameState.board "player1Wins") (fromList [" ", " ", " ", " ", " ", " ", " ", " ", " "])
+
+        , test "Gets the display board of a game that has a winner" <|
+           \() ->
+             Expect.equal (getDisplayBoard gameState.board "player2Wins") (fromList [" ", " ", " ", " ", " ", " ", " ", " ", " "])
+
+        , test "Gets the display board of a game that's a tie" <|
+           \() ->
+             Expect.equal (getDisplayBoard (fromList
+             ["X", "O", "X",
+             "O", "X", "O",
+              "O", "X", "O"]) "tie")
+              (fromList
+             ["X", "O", "X",
+             "O", "X", "O",
+              "O", "X", "O"])
         -- , test "get game returns an html representation of the game" <|
         --    \() ->
         --     Expect.equal (getGame gameState)

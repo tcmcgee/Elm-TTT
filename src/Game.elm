@@ -6,6 +6,16 @@ import List exposing (append, map, foldl)
 getGameState =
   {board = fromList ["","","","","","","","",""], status = "in progress"}
 
+getGameStatus board =
+  if checkMarkerForWin board "X" then
+    "player1Wins"
+  else if checkMarkerForWin board "O" then
+    "player2Wins"
+  else if isTie board then
+    "tie"
+  else
+    "in progress"
+
 getPossibleWins board =
   (append (append (getRows board) (getCols board)) (getDiags board))
 
