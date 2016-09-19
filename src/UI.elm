@@ -5,18 +5,22 @@ import Html.Events exposing (onClick)
 import Array exposing (fromList, get, indexedMap)
 
 import Board exposing (..)
+import Game exposing (..)
 
 getButtonForIndex index board =
   button [onClick index, disabled (getMarkerAt index board /= "")] [text (getMarkerAt index board)]
 
 
-getTurnText board =
-  (getMarker ({getGameState | board = board})) ++ "'s Turn!"
+getTurnText board status =
+  if (status == "in progress") then  
+    (getMarker ({getGameState | board = board})) ++ "'s Turn!"
+  else
+    "Winner!"
 
-getGame {board} =
+getGame {board, status} =
   div [attribute "margin-left" "auto", attribute "margin-right" "auto", attribute "align" "center"]
   [
-    text (getTurnText board),
+    text (getTurnText board status),
     table []
       [
         tr[] [
