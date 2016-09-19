@@ -7,6 +7,7 @@ import Array exposing (fromList, get, indexedMap)
 
 import Board exposing (..)
 import UI exposing (..)
+import Game exposing (..)
 
 main =
   beginnerProgram { model = getGameState, view = view, update = update }
