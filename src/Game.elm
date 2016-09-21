@@ -2,19 +2,22 @@ module Game exposing (..)
 import Board exposing (getRows, getCols, getDiags)
 import Array exposing(fromList, map, foldl, filter, length)
 import List exposing (append, map, foldl)
+import Types exposing(..)
 
-getGameState =
-  {board = fromList ["","","","","","","","",""], status = "in progress"}
+getNewGameState =
+  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = "human", player1Marker = "X", player2Type = "human", player2Marker = "O", isXTurn = True}
 
-getGameStatus board =
-  if checkMarkerForWin board "X" then
-    "player1Wins"
-  else if checkMarkerForWin board "O" then
-    "player2Wins"
-  else if isTie board then
-    "tie"
+getUpdatedGame model =
+  if checkMarkerForWin model.board model.player1Marker then
+    {model| status = (PlayerWins model.player1Marker)}
+  else if checkMarkerForWin model.board model.player2Marker then
+    {model| status = (PlayerWins model.player2Marker)}
+  else if isTie model then
+    {model| status = Tie}
+  else if model.status == Menu then
+    {model| status = Menu}
   else
-    "in progress"
+    {model| status = InProgress}
 
 getPossibleWins board =
   (append (append (getRows board) (getCols board)) (getDiags board))
@@ -24,11 +27,17 @@ checkMarkerForWin board marker =
   in
     List.foldl (||) False (List.map (\x -> Array.foldl (&&) True x) (List.map (Array.map (\x -> x == marker)) possibleWins))
 
-hasWinner board =
-  (checkMarkerForWin board "X") || (checkMarkerForWin board "O")
+hasWinner {board, player1Marker, player2Marker} =
+  (checkMarkerForWin board player1Marker) || (checkMarkerForWin board player2Marker)
 
-isTie board =
-  if hasWinner board then
+isTie model =
+  if hasWinner model then
     False
   else
-    ((length (Array.filter (\x -> x == "") board)) == 0)
+    ((length (Array.filter (\x -> x == "") model.board)) == 0)
+
+getCurrentPlayerType {isXTurn, player1Type, player2Type} =
+  if isXTurn then
+    player1Type
+  else
+    player2Type

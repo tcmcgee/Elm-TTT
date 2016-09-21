@@ -4,13 +4,15 @@ import Test exposing (..)
 import Board exposing(..)
 import UI exposing(..)
 import Game exposing(..)
+import Computer exposing(..)
 import Expect
 import Array exposing(fromList, set)
 import String
+import Types exposing (..)
 import Html exposing (button, text, div)
 import Html.Events exposing (onClick)
 gameState =
-  { board = fromList ["","","","","","","","",""] }
+  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = "human", player1Marker = "X", player2Type = "human", player2Marker = "O", isXTurn = True}
 emptyBoard = fromList ["","","","","","","","",""]
 fullBoard = fromList ["X","O","X","O","X","X","O","O","X"]
 all : Test
@@ -108,64 +110,85 @@ all =
         --- UI
         , test "returns a button based on the index of the board if given 0" <|
            \() ->
-             Expect.equal (getButtonForIndex 0 (fromList ["","","","","","","","",""])) (button [onClick 0] [text ""])
+             Expect.equal (getButtonForIndex 0 (fromList ["","","","","","","","",""])) (button [onClick (MakeMove 0)] [text ""])
 
         , test "returns a dynamic button based on the index of the board if given 1" <|
            \() ->
-             Expect.equal (getButtonForIndex 1 (fromList ["","","","","","","","",""])) (button [onClick 1] [text ""])
+             Expect.equal (getButtonForIndex 1 (fromList ["","","","","","","","",""])) (button [onClick (MakeMove 1)] [text ""])
 
         , test "gets the turns text for an empty board" <|
            \() ->
-             Expect.equal (getTurnText emptyBoard "in progress") "X's Turn!"
+             Expect.equal (getTurnText emptyBoard InProgress) "X's Turn!"
 
         , test "gets the turns text for a non-empty board" <|
            \() ->
-             Expect.equal (getTurnText (set 0 "X" emptyBoard) "in progress") "O's Turn!"
+             Expect.equal (getTurnText (set 0 "X" emptyBoard) InProgress) "O's Turn!"
 
         , test "gets the turns text when X wins" <|
            \() ->
-             Expect.equal (getTurnText gameState.board "player1Wins") "X Wins!!"
+             Expect.equal (getTurnText gameState.board (PlayerWins "X")) "X Wins!!"
 
         , test "gets the turns text when O wins" <|
            \() ->
-             Expect.equal (getTurnText gameState.board "player2Wins") "O Wins!!"
+             Expect.equal (getTurnText gameState.board (PlayerWins "O")) "O Wins!!"
 
         , test "gets the turns text when there's a tie" <|
            \() ->
-             Expect.equal (getTurnText gameState.board "tie") "Game Over, It's a Tie!"
+             Expect.equal (getTurnText gameState.board Tie) "Game Over, It's a Tie!"
 
         , test "Gets the display board of an empty board and an in progress game" <|
            \() ->
-             Expect.equal (getDisplayBoard gameState.board "in progress") gameState.board
+             Expect.equal (getDisplayBoard gameState.board InProgress) gameState.board
 
         , test "Gets the display board of a game that has a winner" <|
            \() ->
-             Expect.equal (getDisplayBoard gameState.board "player1Wins") (fromList [" ", " ", " ", " ", " ", " ", " ", " ", " "])
+             Expect.equal (getDisplayBoard gameState.board (PlayerWins "X")) (fromList [" ", " ", " ", " ", " ", " ", " ", " ", " "])
 
         , test "Gets the display board of a game that has a winner" <|
            \() ->
-             Expect.equal (getDisplayBoard gameState.board "player2Wins") (fromList [" ", " ", " ", " ", " ", " ", " ", " ", " "])
+             Expect.equal (getDisplayBoard gameState.board (PlayerWins "O")) (fromList [" ", " ", " ", " ", " ", " ", " ", " ", " "])
 
         , test "Gets the display board of a game that's a tie" <|
            \() ->
              Expect.equal (getDisplayBoard (fromList
              ["X", "O", "X",
              "O", "X", "O",
-              "O", "X", "O"]) "tie")
+              "O", "X", "O"]) Tie)
               (fromList
              ["X", "O", "X",
              "O", "X", "O",
               "O", "X", "O"])
-        -- , test "get game returns an html representation of the game" <|
-        --    \() ->
-        --     Expect.equal (getGame gameState)
-
         --- End UI
         --- Game
+        , test "Gets a new base game state" <|
+           \() ->
+             Expect.equal getNewGameState gameState
+
+        , test "updating the game at the menu returns an unaltered gameState" <|
+           \() ->
+             Expect.equal (getUpdatedGame gameState) gameState
+
+        , test "updating the game with a board with a player1 win sets the status to PlayerWins with the marker" <|
+           \() ->
+             Expect.equal (getUpdatedGame {gameState | board = (fromList["X","X","X","","","","","",""])}).status (PlayerWins gameState.player1Marker)
+
+        , test "updating the game with a board with a player2 win sets the status to PlayerWins with the marker" <|
+           \() ->
+             Expect.equal (getUpdatedGame {gameState | board = (fromList["O","O","O","","","","","",""])}).status (PlayerWins gameState.player2Marker)
+
+        , test "updating the game with a board with a tie sets the status to tie" <|
+           \() ->
+             Expect.equal (getUpdatedGame {gameState | board = (fromList["O","X","O","O","X","O","X","O","X"])}).status Tie
+
+        , test "updating the game with a board that is in progress returns a board that is in progress" <|
+           \() ->
+             Expect.equal (getUpdatedGame {gameState | status = InProgress, board = (fromList["O","","","","","","X","",""])}).status InProgress
+
         , test "gets the possible winning combinations of an empty board" <|
            \() ->
              Expect.equal (getPossibleWins gameState.board)
                           [fromList ["","",""], fromList ["","",""], fromList ["","",""], fromList ["","",""], fromList ["","",""], fromList ["","",""], fromList ["","",""], fromList ["","",""]]
+
         , test "gets the possible winning combinations of a non-empty board" <|
            \() ->
              Expect.equal (getPossibleWins (fromList ["X","","","","","","","",""]))
@@ -176,7 +199,7 @@ all =
              Expect.equal (getPossibleWins (fromList ["0","1","2","3","4","5","6","7","8"]))
                           [fromList ["0","1","2"], fromList ["3","4","5"], fromList ["6","7","8"], fromList ["0","3","6"], fromList ["1","4","7"], fromList ["2","5","8"], fromList ["0","4","8"], fromList ["6","4","2"]]
 
-        , test "can tell you if the game has a winner for a certain marker" <|
+        , test "can tell you if the game does not have a winner for a certain marker" <|
            \() ->
              Expect.equal (checkMarkerForWin gameState.board "X") False
 
@@ -194,7 +217,7 @@ all =
 
         , test "can tell you if the game does not have a winner" <|
            \() ->
-             Expect.equal (hasWinner gameState.board) False
+             Expect.equal (hasWinner gameState) False
 
         , test "can tell you if the game does not have a winner with a full board" <|
            \() ->
@@ -204,33 +227,52 @@ all =
 
         , test "can tell you if the game has a winner if X wins" <|
            \() ->
-             Expect.equal (hasWinner (fromList ["X","X","X","","","","","",""])) True
+             Expect.equal (hasWinner {gameState | board = (fromList ["X","X","X","","","","","",""])}) True
 
         , test "can tell you if the game has a winner if O wins" <|
            \() ->
-             Expect.equal (hasWinner (fromList ["O","O","O","","","","","",""])) True
+             Expect.equal (hasWinner {gameState | board = (fromList ["O","O","O","","","","","",""])}) True
 
         , test "can tell you if the game has a winner if O wins diagnal" <|
            \() ->
-             Expect.equal (hasWinner (fromList ["O","","","","O","","","","O"])) True
+             Expect.equal (hasWinner {gameState | board = (fromList ["O","","","","O","","","","O"])}) True
 
         , test "can tell you if the game has a winner if O wins vertically" <|
            \() ->
-             Expect.equal (hasWinner (fromList ["O","","","O","","","O","",""])) True
+             Expect.equal (hasWinner {gameState | board = (fromList ["O","","","O","","","O","",""])}) True
 
         , test "can tell you if the game is not a tie if it is not" <|
            \() ->
-             Expect.equal (isTie (fromList ["O","","","O","","","O","",""])) False
+             Expect.equal (isTie {gameState | board = (fromList ["O","","","O","","","O","",""])}) False
 
         , test "can tell you if the game is a tie if it is" <|
            \() ->
-             Expect.equal (isTie (fromList ["O","X","O",
+             Expect.equal (isTie {gameState | board = (fromList ["O","X","O",
                                             "O","X","X",
-                                            "X","O","O"])) True
+                                            "X","O","O"])}) True
 
         , test "can tell you if the game is not a tie if it isn't and the board is full" <|
            \() ->
-             Expect.equal (isTie (fromList ["O","X","X",
-                                            "O","X","X",
-                                            "X","O","O"])) False
+             Expect.equal (isTie {gameState | board = (fromList ["O","X","X",
+              "O","X","X",
+              "X","O","O"])}) False
+        --- end game
+        --- Computer
+        , test "It can return the first empty index of an empty board" <|
+           \() ->
+             Expect.equal (getMove (fromList ["","","","","","","","",""])) 0
+
+        , test "It can return the first empty index of a non empty board" <|
+           \() ->
+             Expect.equal (getMove (fromList ["X","","","","","","","",""])) 1
+
+        , test "It can return the first empty spot of a board with 0 open" <|
+           \() ->
+             Expect.equal (getMove (fromList ["","X","","","","","","",""])) 0
+
+        , test "It can return the last spot of a board with no spots open" <|
+           \() ->
+             Expect.equal (getMove (fromList ["O","X","X","O","X","O","X","O","X"])) 9
+
+        --- end computer
       ]
