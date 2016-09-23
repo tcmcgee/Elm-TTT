@@ -12,7 +12,7 @@ import Types exposing (..)
 import Html exposing (button, text, div)
 import Html.Events exposing (onClick)
 gameState =
-  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = "human", player1Marker = "X", player2Type = "human", player2Marker = "O", isXTurn = True}
+  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = Human, player1Marker = "X", player2Type = Human, player2Marker = "O", isXTurn = True}
 emptyBoard = fromList ["","","","","","","","",""]
 fullBoard = fromList ["X","O","X","O","X","X","O","O","X"]
 all : Test
@@ -206,6 +206,14 @@ all =
         , test "can tell you if the game has a winner for a certain marker if X wins" <|
            \() ->
              Expect.equal (checkMarkerForWin (fromList ["X","X","X","","","","","",""]) "X") True
+
+        , test "can tell you if the game is not over" <|
+           \() ->
+             Expect.equal (gameOver gameState) False
+
+        , test "can tell you if the game is over" <|
+           \() ->
+             Expect.equal (gameOver {gameState| board = (fromList ["X","X","X","","","","","",""])}) True
 
         , test "does not tell you that the game has a winner for a certain marker if the other marker wins" <|
            \() ->

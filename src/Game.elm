@@ -5,7 +5,7 @@ import List exposing (append, map, foldl)
 import Types exposing(..)
 
 getNewGameState =
-  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = "human", player1Marker = "X", player2Type = "human", player2Marker = "O", isXTurn = True}
+  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = Human, player1Marker = "X", player2Type = Human, player2Marker = "O", isXTurn = True}
 
 getUpdatedGame model =
   if checkMarkerForWin model.board model.player1Marker then
@@ -35,6 +35,9 @@ isTie model =
     False
   else
     ((length (Array.filter (\x -> x == "") model.board)) == 0)
+
+gameOver model =
+  (||) (hasWinner model) (isTie model)
 
 getCurrentPlayerType {isXTurn, player1Type, player2Type} =
   if isXTurn then

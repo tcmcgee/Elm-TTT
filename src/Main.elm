@@ -23,22 +23,25 @@ update msg model =
 
     TakeTurn playerType ->
       case playerType of
-        "Computer" ->
+        Computer ->
           (update (MakeMove (Computer.getMove model.board)) model)
-        _ ->
+        Human ->
           model
 
     MakeMove spotIndex ->
       let updatedModel =
         {model | board = (makeMove model spotIndex (getMarker model)), isXTurn = (not model.isXTurn)}
       in
-        update (TakeTurn (getCurrentPlayerType updatedModel)) updatedModel
+        if gameOver model then
+          model
+        else
+          update (TakeTurn (getCurrentPlayerType updatedModel)) updatedModel
 
     StartGame gameType ->
       case gameType of
         HvH ->
-          {model | status = InProgress, player1Type = "Human", player2Type = "Human"}
+          {model | status = InProgress, player1Type = Human, player2Type = Human}
         HvC ->
-          {model | status = InProgress, player1Type = "Human", player2Type = "Computer"}
+          {model | status = InProgress, player1Type = Human, player2Type = Computer}
         CvH ->
-            (update (TakeTurn "Computer") {model | status = InProgress, player1Type = "Computer", player2Type = "Human"})
+            (update (TakeTurn Computer) {model | status = InProgress, player1Type = Computer, player2Type = Human})
