@@ -24,13 +24,13 @@ update msg model =
     TakeTurn playerType ->
       case playerType of
         Computer ->
-          (update (MakeMove (Computer.getMove model.board)) model)
+          (update (MakeMove (Computer.getMove model)) model)
         Human ->
           model
 
     MakeMove spotIndex ->
       let updatedModel =
-        {model | board = (makeMove model spotIndex (getMarker model)), isXTurn = (not model.isXTurn)}
+        {model | board = (makeMove model spotIndex (getMarker model)), isP1Turn = (not model.isP1Turn)}
       in
         if gameOver model then
           model

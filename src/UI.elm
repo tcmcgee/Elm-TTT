@@ -22,10 +22,10 @@ getDisplayBoard board status =
         else
           x) board
 
-getTurnText board status =
+getTurnText status player1Marker player2Marker isP1Turn =
   case status of
     InProgress ->
-      (getMarker ({getNewGameState | board = board})) ++ "'s Turn!"
+      (getMarker ({getNewGameState | player1Marker = player1Marker, player2Marker = player2Marker, isP1Turn = isP1Turn})) ++ "'s Turn!"
     PlayerWins marker ->
       marker ++ " Wins!!"
     Tie ->
@@ -50,12 +50,12 @@ getMenuHTML {board,status} =
     button [onClick (StartGame CvH) ] [text "Computer vs Human"]
   ]
 
-getBoardHTML {board,status} =
+getBoardHTML {board,status,player1Marker,player2Marker,isP1Turn} =
   let displayBoard = getDisplayBoard board status
   in
     div [attribute "margin-left" "auto", attribute "margin-right" "auto", attribute "align" "center"]
     [
-      text (getTurnText board status),
+      text (getTurnText status player1Marker player2Marker isP1Turn),
       table []
         [
           tr[] [

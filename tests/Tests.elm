@@ -12,9 +12,10 @@ import Types exposing (..)
 import Html exposing (button, text, div)
 import Html.Events exposing (onClick)
 gameState =
-  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = Human, player1Marker = "X", player2Type = Human, player2Marker = "O", isXTurn = True}
+  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = Human, player1Marker = "X", player2Type = Human, player2Marker = "O", isP1Turn = True}
 emptyBoard = fromList ["","","","","","","","",""]
 fullBoard = fromList ["X","O","X","O","X","X","O","O","X"]
+
 all : Test
 all =
     describe "TicTacToe"
@@ -50,7 +51,7 @@ all =
 
         , test "Gets the marker for a board when it's O's Turn " <|
            \() ->
-             Expect.equal (getMarker {gameState| board = (fromList ["X","","","","","","","",""])}) "O"
+             Expect.equal (getMarker {gameState| isP1Turn = False, board = (fromList ["X","","","","","","","",""])}) "O"
 
         , test "gets the marker at the given index of the board" <|
            \() ->
@@ -118,23 +119,23 @@ all =
 
         , test "gets the turns text for an empty board" <|
            \() ->
-             Expect.equal (getTurnText emptyBoard InProgress) "X's Turn!"
+             Expect.equal (getTurnText InProgress "X" "O" True) "X's Turn!"
 
         , test "gets the turns text for a non-empty board" <|
            \() ->
-             Expect.equal (getTurnText (set 0 "X" emptyBoard) InProgress) "O's Turn!"
+             Expect.equal (getTurnText InProgress "X" "O" False) "O's Turn!"
 
         , test "gets the turns text when X wins" <|
            \() ->
-             Expect.equal (getTurnText gameState.board (PlayerWins "X")) "X Wins!!"
+             Expect.equal (getTurnText (PlayerWins "X") "X" "O" True) "X Wins!!"
 
         , test "gets the turns text when O wins" <|
            \() ->
-             Expect.equal (getTurnText gameState.board (PlayerWins "O")) "O Wins!!"
+             Expect.equal (getTurnText (PlayerWins "O") "X" "O" False) "O Wins!!"
 
         , test "gets the turns text when there's a tie" <|
            \() ->
-             Expect.equal (getTurnText gameState.board Tie) "Game Over, It's a Tie!"
+             Expect.equal (getTurnText Tie "X" "O" True) "Game Over, It's a Tie!"
 
         , test "Gets the display board of an empty board and an in progress game" <|
            \() ->
@@ -266,21 +267,56 @@ all =
               "X","O","O"])}) False
         --- end game
         --- Computer
-        , test "It can return the first empty index of an empty board" <|
+        , test "can get all the empty spots on a board" <|
            \() ->
-             Expect.equal (getMove (fromList ["","","","","","","","",""])) 0
+             Expect.equal (getEmptySpots gameState.board) [0,1,2,3,4,5,6,7,8]
 
-        , test "It can return the first empty index of a non empty board" <|
+        , test "can get all the empty spots on a board that isn't empty" <|
            \() ->
-             Expect.equal (getMove (fromList ["X","","","","","","","",""])) 1
+             Expect.equal (getEmptySpots (fromList ["X","O","X","X","X","X","","",""])) [6,7,8]
 
-        , test "It can return the first empty spot of a board with 0 open" <|
+        , test "can get the index of the max of a list" <|
            \() ->
-             Expect.equal (getMove (fromList ["","X","","","","","","",""])) 0
+             Expect.equal (getIndexOfMaxOfList [1,2,3,4] 0 -1 -1) 3
 
-        , test "It can return the last spot of a board with no spots open" <|
+        , test "can get the index of the max of the 2nd element of a list" <|
            \() ->
-             Expect.equal (getMove (fromList ["O","X","X","O","X","O","X","O","X"])) 9
+             Expect.equal (getIndexOfMaxOfList [1,5,3,4] 0 -1 -1) 1
 
+        , test "can get the max of a list" <|
+           \() ->
+             Expect.equal (getListMax [1,2,3,4,5,4,3,2,2]) 5
+
+        , test "can get the value of a list of ints at a given index" <|
+           \() ->
+             Expect.equal (getValueAtIndex 2 [0,1,2,3,4,5]) 2
+
+        , test "can get the value of a list of ints at a given index if it's the first element" <|
+           \() ->
+             Expect.equal (getValueAtIndex 0 [0,1,2,3,4,5]) 0
+
+        , test "can get the value of a list of ints at a given index if it's the first element" <|
+           \() ->
+             Expect.equal (getValueAtIndex 4 [0,1,2,3,4,5]) 4
+
+        , test "It can return a corner when the board is empty" <|
+           \() ->
+             Expect.equal (getMove {gameState | board = (fromList ["","","","","","","","",""])}) 0
+
+        , test "It can return the middle if player1 takes a corner" <|
+           \() ->
+             Expect.equal (getMove {gameState | board = (fromList ["X","","","","","","","",""]), isP1Turn = False}) 4
+
+        , test "can play every possible game and win given the opportunity" <|
+           \() ->
+             Expect.equal (playAllGames {gameState | board = (fromList ["X","O","X",
+                        "O","X","X",
+                        "O","",""]), isP1Turn = True} 0 ) 8
+
+        , test "can play every possible game and blocks a possible win" <|
+           \() ->
+             Expect.equal (getMove {gameState | board = (fromList ["X","X","O",
+                        "O","X","O",
+                        "","",""]), isP1Turn = False}) 8
         --- end computer
       ]
