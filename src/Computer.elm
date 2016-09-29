@@ -15,13 +15,16 @@ playAllGames model depth =
     0
   else
     let openSpots = getEmptySpots model.board
-        scoredSpots = (map (\x -> (-1 * playAllGames {model | board = (makeMove model x (getMarker model)), isP1Turn = (not model.isP1Turn)} (depth + 1))) openSpots)
+        scoredSpots = (map (\openSpotIndex -> (-1 * playAllGames (updateGameState model openSpotIndex) (depth + 1))) openSpots)
     in
       if depth == 0 then
         getIndexOfMaxOfList scoredSpots 0 -100 -100 |>
           (\x -> getValueAtIndex x openSpots)
       else
         getListMax scoredSpots
+
+updateGameState model moveIndex =
+  {model | board = (makeMove model moveIndex (getMarker model)), isP1Turn = (not model.isP1Turn)}
 
 getIndexOfMaxOfList list index maxIndex maxVal=
   case list of

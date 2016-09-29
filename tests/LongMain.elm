@@ -12,7 +12,7 @@ import Json.Encode exposing (Value)
 
 main : Program Value
 main =
-  run emit (describe "All the tests" [BoardTests.all, UITests.all, GameTests.all, ComputerTests.all])
+  run emit (describe "All the tests" [BoardTests.all, UITests.all, GameTests.all, ComputerTests.long])
 
 
 port emit : ( String, Value ) -> Cmd msg

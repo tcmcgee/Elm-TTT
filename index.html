@@ -8146,6 +8146,19 @@ var _user$project$Computer$getIndexOfMaxOfList = F4(
 			}
 		}
 	});
+var _user$project$Computer$updateModel = F2(
+	function (model, moveIndex) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				board: A3(
+					_user$project$Board$makeMove,
+					model,
+					moveIndex,
+					_user$project$Game$getMarker(model)),
+				isP1Turn: _elm_lang$core$Basics$not(model.isP1Turn)
+			});
+	});
 var _user$project$Computer$playAllGames = F2(
 	function (model, depth) {
 		if (_user$project$Game$hasWinner(model)) {
@@ -8157,19 +8170,10 @@ var _user$project$Computer$playAllGames = F2(
 				var openSpots = _user$project$Board$getEmptySpots(model.board);
 				var scoredSpots = A2(
 					_elm_lang$core$List$map,
-					function (x) {
+					function (openSpotIndex) {
 						return -1 * A2(
 							_user$project$Computer$playAllGames,
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{
-									board: A3(
-										_user$project$Board$makeMove,
-										model,
-										x,
-										_user$project$Game$getMarker(model)),
-									isP1Turn: _elm_lang$core$Basics$not(model.isP1Turn)
-								}),
+							A2(_user$project$Computer$updateModel, model, openSpotIndex),
 							depth + 1);
 					},
 					openSpots);
