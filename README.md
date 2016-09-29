@@ -2,16 +2,40 @@
 
 ## To Play
 
+### Requirements
+* A Browser
+
+### Instructions
+
 * Navigate to [this website](http://www.tomcmcgee.me/Elm-TTT/) and play!
 
 OR
 
 * Clone this repository and open `index.html` (in your browser of choice) and play!
 
-## To Run Tests
+## To Develop
+
+### Requirements
+
+* Node
+* Elm `npm install -g elm`
+* Elm-test `npm install -g elm-test`
+
+### Instructions
+
+#### To Build
+* `elm-make ./src/Main.elm`
+* Open index.html
+OR
+* `elm-reactor` then navigate to http://localhost:8000/index.html
+
+#### To Run Tests
 
 * Run `npm install -g elm` (if you don't have elm installed)
+* `npm install -g elm-test`
 * Clone this repository
+* `cd ./tests/`
 * Run `elm package install`
+* `cd ..`
 * run `elm-test` to run the fast tests
 * run `elm-test ./tests/LongTests.elm` to run every test (including the ones that call minimax)
