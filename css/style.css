@@ -1,0 +1,20 @@
+body {
+    background-color: lightblue;
+}
+
+.tr button {
+  width: 100px;
+  height:100px;
+}
+
+button {
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 10px;
+  font-size: 150%;
+  margin: 10px;
+}
+h1 {
+    color: navy;
+    margin-left: 20px;
+}

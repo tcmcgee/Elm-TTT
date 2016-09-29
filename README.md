@@ -13,6 +13,8 @@ OR
 
 * Clone this repository and open `index.html` (in your browser of choice) and play!
 
+**Note** The computer likes to take his time.
+
 ## To Develop
 
 ### Requirements
@@ -24,7 +26,7 @@ OR
 ### Instructions
 
 #### To Build
-* `elm-make ./src/Main.elm`
+* `elm-make ./src/Main.elm --output=main.js`
 * Open index.html
 OR
 * `elm-reactor` then navigate to http://localhost:8000/index.html

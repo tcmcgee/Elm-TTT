@@ -55,7 +55,7 @@ getBoardHTML {board,status,player1Marker,player2Marker,isP1Turn} =
   in
     div [attribute "margin-left" "auto", attribute "margin-right" "auto", attribute "align" "center"]
     [
-      text (getTurnText status player1Marker player2Marker isP1Turn),
+      h1[] [text (getTurnText status player1Marker player2Marker isP1Turn)],
       table []
         [
           tr[] [
