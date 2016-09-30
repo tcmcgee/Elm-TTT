@@ -7,7 +7,7 @@
 
 ### Instructions
 
-* Navigate to [this website](http://www.tomcmcgee.me/Elm-TTT/) and play!
+* Navigate to [this website](http://www.tomcmcgee.me/Elm-TTT/) and play! (The deployed version has the first moves hard coded to improve play. Check out the branch `predetermined-first-moves` if you're interested in seeing that!)
 
 OR
 
@@ -40,4 +40,4 @@ OR
 * Run `elm package install`
 * `cd ..`
 * run `elm-test` to run the fast tests
-* run `elm-test ./tests/LongTests.elm` to run every test (including the ones that call minimax)
+* run `elm-test ./tests/LongMain.elm` to run every test (including the ones that call minimax)
