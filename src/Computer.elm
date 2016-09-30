@@ -11,7 +11,7 @@ getMove model =
 playAllGames model depth =
   if hasWinner model then
     -10 + depth
-  else if isTie model then
+  else if isTie model || depth > 5 then
     0
   else
     let openSpots = getEmptySpots model.board

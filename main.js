@@ -8196,7 +8196,7 @@ var _user$project$Computer$playAllGames = F2(
 		if (_user$project$Game$hasWinner(model)) {
 			return -10 + depth;
 		} else {
-			if (_user$project$Game$isTie(model)) {
+			if (_user$project$Game$isTie(model) || (_elm_lang$core$Native_Utils.cmp(depth, 5) > 0)) {
 				return 0;
 			} else {
 				var openSpots = _user$project$Board$getEmptySpots(model.board);
