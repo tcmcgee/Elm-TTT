@@ -8217,7 +8217,16 @@ var _user$project$Computer$playAllGames = F2(
 		}
 	});
 var _user$project$Computer$getMove = function (model) {
-	return A2(_user$project$Computer$playAllGames, model, 0);
+	var openSpots = _user$project$Board$getEmptySpots(model.board);
+	var _p3 = _elm_lang$core$List$length(openSpots);
+	switch (_p3) {
+		case 9:
+			return 0;
+		case 8:
+			return 4;
+		default:
+			return A2(_user$project$Computer$playAllGames, model, 0);
+	}
 };
 
 var _user$project$UI$getMenuHTML = function (_p0) {

@@ -54,6 +54,14 @@ all =
         , test "can return a tie score (0) if the depth is ever greater than 4" <|
            \() ->
              Expect.equal (playAllGames gameState 6) 0
+
+        , test "can return the first spot if the board is empty" <|
+           \() ->
+             Expect.equal (getMove gameState) 0
+
+        , test "can return the middle spot if the board has one move" <|
+           \() ->
+             Expect.equal (getMove {gameState | board = (fromList ["X","","","","","","","",""])}) 4 
       ]
 
 long : Test

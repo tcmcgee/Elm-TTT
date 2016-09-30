@@ -6,7 +6,15 @@ import List exposing (reverse,sort, map, length)
 
 
 getMove model =
-  playAllGames model 0
+  let openSpots = getEmptySpots model.board
+  in
+    case (length openSpots) of
+      9 ->
+        0
+      8 ->
+        4
+      _ ->
+        playAllGames model 0
 
 playAllGames model depth =
   if hasWinner model then
