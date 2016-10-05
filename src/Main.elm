@@ -1,14 +1,14 @@
 module Main exposing(..)
+import Types exposing (..)
 import Html exposing (table, button, text, tr, td, div)
 import Html.Attributes exposing(disabled, height, width, attribute)
 import Html.App exposing (beginnerProgram)
 import Html.Events exposing (onClick)
 import Array exposing (Array, fromList, get, indexedMap)
+import Board exposing (makeMove)
+import UI exposing (getGameHTML)
+import Game exposing (getNewGameState, getMarker, gameOver, getCurrentPlayerType, getUpdatedGame)
 import Computer
-import Board exposing (..)
-import UI exposing (..)
-import Game exposing (..)
-import Types exposing (..)
 
 main =
   beginnerProgram { model = getNewGameState, view = view, update = update }

@@ -1,6 +1,6 @@
 module Computer exposing (..)
+import Types exposing (..)
 import Array exposing (toList)
-import Types exposing (GameState)
 import Board exposing (getNth, makeMove, getEmptySpots)
 import Game exposing (hasWinner, isTie, getMarker)
 import List exposing (reverse,sort, map, length)

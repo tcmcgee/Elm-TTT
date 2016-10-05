@@ -1,13 +1,11 @@
 module UI exposing (..)
+import Types exposing (..)
 import Html exposing (table, button, text, tr, td, div, h1, h2)
 import Html.Attributes exposing(disabled, height, width, attribute)
 import Html.Events exposing (onClick)
 import Array exposing (Array,fromList, get, indexedMap, map)
-import Maybe exposing (withDefault )
-
-import Board exposing (..)
-import Game exposing (..)
-import Types exposing (..)
+import Maybe exposing (withDefault)
+import Game exposing (getMarker, getNewGameState)
 
 getButtonForIndex: Int -> Array String -> Html.Html Msg
 getButtonForIndex index board =
@@ -36,6 +34,7 @@ getDisplayBoard board status =
             " "
           else
             marker) board
+
 getTurnText: Status -> Marker -> Marker -> Bool -> String
 getTurnText status player1Marker player2Marker isP1Turn =
   case status of
@@ -47,6 +46,7 @@ getTurnText status player1Marker player2Marker isP1Turn =
       "Game Over, It's a Tie!"
     Menu ->
       ""
+
 getGameHTML: GameState -> Html.Html Msg
 getGameHTML model =
   case model.status of

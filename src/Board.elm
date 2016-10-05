@@ -1,5 +1,4 @@
 port module Board exposing (..)
-import Html exposing (..)
 import Types exposing (..)
 import Array exposing(Array, initialize, get,set,length,filter, fromList, slice, toList, indexedMap)
 import List exposing(indexedMap, map, reverse)

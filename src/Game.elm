@@ -1,8 +1,8 @@
 module Game exposing (..)
+import Types exposing(..)
 import Board exposing (getRows, getCols, getDiags)
 import Array exposing(Array, fromList, map, foldl, filter, length)
 import List exposing (append, map, foldl)
-import Types exposing(..)
 
 getNewGameState: GameState
 getNewGameState =

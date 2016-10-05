@@ -1,5 +1,5 @@
 module Types exposing(..)
-import Array exposing (..)
+import Array exposing(Array)
 
 type PlayerType = Computer | Human
 type Marker = X | O | Empty
