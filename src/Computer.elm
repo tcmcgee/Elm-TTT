@@ -2,7 +2,7 @@ module Computer exposing (..)
 import Array exposing (toList)
 import Board exposing (getNth, makeMove, getEmptySpots)
 import Game exposing (hasWinner, isTie, getMarker)
-import List exposing (reverse,sort, map, length)
+import List exposing (reverse,sort, map, length, member)
 
 
 getMove model =
@@ -12,7 +12,10 @@ getMove model =
       9 ->
         0
       8 ->
-        4
+        if member 4 openSpots then
+          4
+        else
+          0
       _ ->
         playAllGames model 0
 

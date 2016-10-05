@@ -8223,7 +8223,7 @@ var _user$project$Computer$getMove = function (model) {
 		case 9:
 			return 0;
 		case 8:
-			return 4;
+			return A2(_elm_lang$core$List$member, 4, openSpots) ? 4 : 0;
 		default:
 			return A2(_user$project$Computer$playAllGames, model, 0);
 	}
