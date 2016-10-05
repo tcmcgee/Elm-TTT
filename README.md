@@ -20,15 +20,17 @@ OR
 ### Requirements
 
 * Node
-* Elm `npm install -g elm`
-* Elm-test `npm install -g elm-test`
+* Elm `npm install elm`
+* Elm-test `npm install elm-test`
 
 ### Instructions
 
 #### To Build
-* `elm-make ./src/Main.elm --output=main.js`
+* `elm-make ./src/Main.elm --output=./dist/main.js`
 * Open index.html
+
 OR
+
 * `elm-reactor` then navigate to http://localhost:8000/index.html
 
 #### To Run Tests

@@ -2,37 +2,52 @@ module UI exposing (..)
 import Html exposing (table, button, text, tr, td, div, h1, h2)
 import Html.Attributes exposing(disabled, height, width, attribute)
 import Html.Events exposing (onClick)
-import Array exposing (fromList, get, indexedMap, map)
+import Array exposing (Array,fromList, get, indexedMap, map)
+import Maybe exposing (withDefault )
 
 import Board exposing (..)
 import Game exposing (..)
 import Types exposing (..)
 
+getButtonForIndex: Int -> Array String -> Html.Html Msg
 getButtonForIndex index board =
-  button [onClick (MakeMove index), disabled (getMarkerAt index board /= "")] [text (getMarkerAt index board)]
+  button [onClick (MakeMove index), disabled ((withDefault "" (get index board)) /= "")] [text (withDefault "" (get index board))]
 
+getMarkerText: Marker -> String
+getMarkerText marker =
+  case marker of
+    X ->
+      "X"
+    O ->
+      "O"
+    Empty ->
+      ""
+
+getDisplayBoard: Array Marker -> Status -> Array String
 getDisplayBoard board status =
   case status of
     InProgress ->
-      board
+      map getMarkerText board
     _ ->
       map (\x ->
-        if x == "" then
-          " "
-        else
-          x) board
-
+        let marker = getMarkerText x
+        in
+          if marker == "" then
+            " "
+          else
+            marker) board
+getTurnText: Status -> Marker -> Marker -> Bool -> String
 getTurnText status player1Marker player2Marker isP1Turn =
   case status of
     InProgress ->
-      (getMarker ({getNewGameState | player1Marker = player1Marker, player2Marker = player2Marker, isP1Turn = isP1Turn})) ++ "'s Turn!"
+      (getMarkerText (getMarker ({getNewGameState | player1Marker = player1Marker, player2Marker = player2Marker, isP1Turn = isP1Turn}))) ++ "'s Turn!"
     PlayerWins marker ->
-      marker ++ " Wins!!"
+      (getMarkerText marker) ++ " Wins!!"
     Tie ->
       "Game Over, It's a Tie!"
     Menu ->
       ""
-
+getGameHTML: GameState -> Html.Html Msg
 getGameHTML model =
   case model.status of
     Menu ->
@@ -40,6 +55,7 @@ getGameHTML model =
     _ ->
       getBoardHTML model
 
+getMenuHTML: GameState -> Html.Html Msg
 getMenuHTML {board,status} =
   div [attribute "margin-left" "auto", attribute "margin-right" "auto", attribute "align" "center"]
   [
@@ -50,6 +66,7 @@ getMenuHTML {board,status} =
     button [onClick (StartGame CvH) ] [text "Computer vs Human"]
   ]
 
+getBoardHTML: GameState -> Html.Html Msg
 getBoardHTML {board,status,player1Marker,player2Marker,isP1Turn} =
   let displayBoard = getDisplayBoard board status
   in

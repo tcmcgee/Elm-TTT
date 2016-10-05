@@ -3,7 +3,7 @@ import Html exposing (table, button, text, tr, td, div)
 import Html.Attributes exposing(disabled, height, width, attribute)
 import Html.App exposing (beginnerProgram)
 import Html.Events exposing (onClick)
-import Array exposing (fromList, get, indexedMap)
+import Array exposing (Array, fromList, get, indexedMap)
 import Computer
 import Board exposing (..)
 import UI exposing (..)
@@ -15,6 +15,7 @@ main =
 
 view model =
   getGameHTML (getUpdatedGame model)
+
 
 update msg model =
   case msg of

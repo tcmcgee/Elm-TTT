@@ -7897,11 +7897,40 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Types$GameState = F7(
+	function (a, b, c, d, e, f, g) {
+		return {board: a, status: b, player1Type: c, player1Marker: d, player2Type: e, player2Marker: f, isP1Turn: g};
+	});
+var _user$project$Types$Human = {ctor: 'Human'};
+var _user$project$Types$Computer = {ctor: 'Computer'};
+var _user$project$Types$Empty = {ctor: 'Empty'};
+var _user$project$Types$O = {ctor: 'O'};
+var _user$project$Types$X = {ctor: 'X'};
+var _user$project$Types$TakeTurn = function (a) {
+	return {ctor: 'TakeTurn', _0: a};
+};
+var _user$project$Types$StartGame = function (a) {
+	return {ctor: 'StartGame', _0: a};
+};
+var _user$project$Types$PlayAgain = {ctor: 'PlayAgain'};
+var _user$project$Types$MakeMove = function (a) {
+	return {ctor: 'MakeMove', _0: a};
+};
+var _user$project$Types$CvH = {ctor: 'CvH'};
+var _user$project$Types$HvC = {ctor: 'HvC'};
+var _user$project$Types$HvH = {ctor: 'HvH'};
+var _user$project$Types$Tie = {ctor: 'Tie'};
+var _user$project$Types$PlayerWins = function (a) {
+	return {ctor: 'PlayerWins', _0: a};
+};
+var _user$project$Types$InProgress = {ctor: 'InProgress'};
+var _user$project$Types$Menu = {ctor: 'Menu'};
+
 var _user$project$Board$getNth = F2(
 	function (index, array) {
 		return A2(
 			_elm_lang$core$Maybe$withDefault,
-			'',
+			_user$project$Types$Empty,
 			A2(_elm_lang$core$Array$get, index, array));
 	});
 var _user$project$Board$getColFromRows = F2(
@@ -7968,7 +7997,7 @@ var _user$project$Board$getMarkerAt = F2(
 	function (index, board) {
 		return A2(
 			_elm_lang$core$Maybe$withDefault,
-			'',
+			_user$project$Types$Empty,
 			A2(_elm_lang$core$Array$get, index, board));
 	});
 var _user$project$Board$countOccupiedSpaces = function (board) {
@@ -7976,7 +8005,7 @@ var _user$project$Board$countOccupiedSpaces = function (board) {
 		A2(
 			_elm_lang$core$Array$filter,
 			function (x) {
-				return !_elm_lang$core$Native_Utils.eq(x, '');
+				return !_elm_lang$core$Native_Utils.eq(x, _user$project$Types$Empty);
 			},
 			board));
 };
@@ -7991,7 +8020,7 @@ var _user$project$Board$getEmptySpots = function (board) {
 				_elm_lang$core$Array$indexedMap,
 				F2(
 					function (x, y) {
-						return _elm_lang$core$Native_Utils.eq(y, '') ? x : -1;
+						return _elm_lang$core$Native_Utils.eq(y, _user$project$Types$Empty) ? x : -1;
 					}),
 				board)));
 };
@@ -8000,32 +8029,6 @@ var _user$project$Board$makeMove = F3(
 		var _p1 = _p0;
 		return A3(_elm_lang$core$Array$set, move, marker, _p1.board);
 	});
-
-var _user$project$Types$GameState = F7(
-	function (a, b, c, d, e, f, g) {
-		return {board: a, status: b, player1Type: c, player1Marker: d, player2Type: e, player2Marker: f, isP1Turn: g};
-	});
-var _user$project$Types$Human = {ctor: 'Human'};
-var _user$project$Types$Computer = {ctor: 'Computer'};
-var _user$project$Types$TakeTurn = function (a) {
-	return {ctor: 'TakeTurn', _0: a};
-};
-var _user$project$Types$StartGame = function (a) {
-	return {ctor: 'StartGame', _0: a};
-};
-var _user$project$Types$PlayAgain = {ctor: 'PlayAgain'};
-var _user$project$Types$MakeMove = function (a) {
-	return {ctor: 'MakeMove', _0: a};
-};
-var _user$project$Types$CvH = {ctor: 'CvH'};
-var _user$project$Types$HvC = {ctor: 'HvC'};
-var _user$project$Types$HvH = {ctor: 'HvH'};
-var _user$project$Types$Tie = {ctor: 'Tie'};
-var _user$project$Types$PlayerWins = function (a) {
-	return {ctor: 'PlayerWins', _0: a};
-};
-var _user$project$Types$InProgress = {ctor: 'InProgress'};
-var _user$project$Types$Menu = {ctor: 'Menu'};
 
 var _user$project$Game$getCurrentPlayerType = function (_p0) {
 	var _p1 = _p0;
@@ -8081,7 +8084,7 @@ var _user$project$Game$isTie = function (model) {
 			A2(
 				_elm_lang$core$Array$filter,
 				function (x) {
-					return _elm_lang$core$Native_Utils.eq(x, '');
+					return _elm_lang$core$Native_Utils.eq(x, _user$project$Types$Empty);
 				},
 				model.board)),
 		0);
@@ -8119,12 +8122,12 @@ var _user$project$Game$getUpdatedGame = function (model) {
 var _user$project$Game$getNewGameState = {
 	board: _elm_lang$core$Array$fromList(
 		_elm_lang$core$Native_List.fromArray(
-			['', '', '', '', '', '', '', '', ''])),
+			[_user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty, _user$project$Types$Empty])),
 	status: _user$project$Types$Menu,
 	player1Type: _user$project$Types$Human,
-	player1Marker: 'X',
+	player1Marker: _user$project$Types$X,
 	player2Type: _user$project$Types$Human,
-	player2Marker: 'O',
+	player2Marker: _user$project$Types$O,
 	isP1Turn: true
 };
 
@@ -8178,6 +8181,10 @@ var _user$project$Computer$getIndexOfMaxOfList = F4(
 			}
 		}
 	});
+var _user$project$Computer$getIndexOfMaxList = F2(
+	function (list, index) {
+		return A4(_user$project$Computer$getIndexOfMaxOfList, list, index, -100, -100);
+	});
 var _user$project$Computer$updateGameState = F2(
 	function (model, moveIndex) {
 		return _elm_lang$core$Native_Utils.update(
@@ -8191,7 +8198,7 @@ var _user$project$Computer$updateGameState = F2(
 				isP1Turn: _elm_lang$core$Basics$not(model.isP1Turn)
 			});
 	});
-var _user$project$Computer$playAllGames = F2(
+var _user$project$Computer$getBestMove = F2(
 	function (model, depth) {
 		if (_user$project$Game$hasWinner(model)) {
 			return -10 + depth;
@@ -8204,7 +8211,7 @@ var _user$project$Computer$playAllGames = F2(
 					_elm_lang$core$List$map,
 					function (openSpotIndex) {
 						return -1 * A2(
-							_user$project$Computer$playAllGames,
+							_user$project$Computer$getBestMove,
 							A2(_user$project$Computer$updateGameState, model, openSpotIndex),
 							depth + 1);
 					},
@@ -8217,7 +8224,7 @@ var _user$project$Computer$playAllGames = F2(
 		}
 	});
 var _user$project$Computer$getMove = function (model) {
-	return A2(_user$project$Computer$playAllGames, model, 0);
+	return A2(_user$project$Computer$getBestMove, model, 0);
 };
 
 var _user$project$UI$getMenuHTML = function (_p0) {
@@ -8283,38 +8290,54 @@ var _user$project$UI$getMenuHTML = function (_p0) {
 					]))
 			]));
 };
-var _user$project$UI$getTurnText = F4(
-	function (status, player1Marker, player2Marker, isP1Turn) {
-		var _p2 = status;
-		switch (_p2.ctor) {
-			case 'InProgress':
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					_user$project$Game$getMarker(
-						_elm_lang$core$Native_Utils.update(
-							_user$project$Game$getNewGameState,
-							{player1Marker: player1Marker, player2Marker: player2Marker, isP1Turn: isP1Turn})),
-					'\'s Turn!');
-			case 'PlayerWins':
-				return A2(_elm_lang$core$Basics_ops['++'], _p2._0, ' Wins!!');
-			case 'Tie':
-				return 'Game Over, It\'s a Tie!';
-			default:
-				return '';
-		}
-	});
+var _user$project$UI$getMarkerText = function (marker) {
+	var _p2 = marker;
+	switch (_p2.ctor) {
+		case 'X':
+			return 'X';
+		case 'O':
+			return 'O';
+		default:
+			return '';
+	}
+};
 var _user$project$UI$getDisplayBoard = F2(
 	function (board, status) {
 		var _p3 = status;
 		if (_p3.ctor === 'InProgress') {
-			return board;
+			return A2(_elm_lang$core$Array$map, _user$project$UI$getMarkerText, board);
 		} else {
 			return A2(
 				_elm_lang$core$Array$map,
 				function (x) {
-					return _elm_lang$core$Native_Utils.eq(x, '') ? ' ' : x;
+					var marker = _user$project$UI$getMarkerText(x);
+					return _elm_lang$core$Native_Utils.eq(marker, '') ? ' ' : marker;
 				},
 				board);
+		}
+	});
+var _user$project$UI$getTurnText = F4(
+	function (status, player1Marker, player2Marker, isP1Turn) {
+		var _p4 = status;
+		switch (_p4.ctor) {
+			case 'InProgress':
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$UI$getMarkerText(
+						_user$project$Game$getMarker(
+							_elm_lang$core$Native_Utils.update(
+								_user$project$Game$getNewGameState,
+								{player1Marker: player1Marker, player2Marker: player2Marker, isP1Turn: isP1Turn}))),
+					'\'s Turn!');
+			case 'PlayerWins':
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$UI$getMarkerText(_p4._0),
+					' Wins!!');
+			case 'Tie':
+				return 'Game Over, It\'s a Tie!';
+			default:
+				return '';
 		}
 	});
 var _user$project$UI$getButtonForIndex = F2(
@@ -8327,19 +8350,25 @@ var _user$project$UI$getButtonForIndex = F2(
 					_user$project$Types$MakeMove(index)),
 					_elm_lang$html$Html_Attributes$disabled(
 					!_elm_lang$core$Native_Utils.eq(
-						A2(_user$project$Board$getMarkerAt, index, board),
+						A2(
+							_elm_lang$core$Maybe$withDefault,
+							'',
+							A2(_elm_lang$core$Array$get, index, board)),
 						''))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html$text(
-					A2(_user$project$Board$getMarkerAt, index, board))
+					A2(
+						_elm_lang$core$Maybe$withDefault,
+						'',
+						A2(_elm_lang$core$Array$get, index, board)))
 				]));
 	});
-var _user$project$UI$getBoardHTML = function (_p4) {
-	var _p5 = _p4;
-	var _p6 = _p5.status;
-	var displayBoard = A2(_user$project$UI$getDisplayBoard, _p5.board, _p6);
+var _user$project$UI$getBoardHTML = function (_p5) {
+	var _p6 = _p5;
+	var _p7 = _p6.status;
+	var displayBoard = A2(_user$project$UI$getDisplayBoard, _p6.board, _p7);
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8357,7 +8386,7 @@ var _user$project$UI$getBoardHTML = function (_p4) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html$text(
-						A4(_user$project$UI$getTurnText, _p6, _p5.player1Marker, _p5.player2Marker, _p5.isP1Turn))
+						A4(_user$project$UI$getTurnText, _p7, _p6.player1Marker, _p6.player2Marker, _p6.isP1Turn))
 					])),
 				A2(
 				_elm_lang$html$Html$table,
@@ -8479,8 +8508,8 @@ var _user$project$UI$getBoardHTML = function (_p4) {
 			]));
 };
 var _user$project$UI$getGameHTML = function (model) {
-	var _p7 = model.status;
-	if (_p7.ctor === 'Menu') {
+	var _p8 = model.status;
+	if (_p8.ctor === 'Menu') {
 		return _user$project$UI$getMenuHTML(model);
 	} else {
 		return _user$project$UI$getBoardHTML(model);

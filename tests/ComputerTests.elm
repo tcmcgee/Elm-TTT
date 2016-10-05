@@ -6,7 +6,7 @@ import Expect
 import Array exposing(fromList, set)
 import Types exposing (..)
 gameState =
-  {board = fromList ["","","","","","","","",""], status = Menu, player1Type = Human, player1Marker = "X", player2Type = Human, player2Marker = "O", isP1Turn = True}
+  {board = fromList [Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty], status = Menu, player1Type = Human, player1Marker = X, player2Type = Human, player2Marker = O, isP1Turn = True}
 
 all : Test
 all =
@@ -46,14 +46,14 @@ all =
 
         , test "can update the board when it updates the game state" <|
            \() ->
-             Expect.equal (updateGameState gameState 0).board (fromList ["X","","","","","","","",""])
+             Expect.equal (updateGameState gameState 0).board (fromList [X,Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty])
 
         , test "can update the board with player2Marker when it updates the game state" <|
            \() ->
-             Expect.equal (updateGameState {gameState | isP1Turn = False} 0).board (fromList ["O","","","","","","","",""])
+             Expect.equal (updateGameState {gameState | isP1Turn = False} 0).board (fromList [O,Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty])
         , test "can return a tie score (0) if the depth is ever greater than 4" <|
            \() ->
-             Expect.equal (playAllGames gameState 6) 0
+             Expect.equal (getBestMove gameState 6) 0
       ]
 
 long : Test
@@ -63,21 +63,21 @@ long =
         all
         , test "It can return a corner when the board is empty" <|
            \() ->
-             Expect.equal (getMove {gameState | board = (fromList ["","","","","","","","",""])}) 0
+             Expect.equal (getMove {gameState | board = (fromList [Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty])}) 0
 
         , test "It can return the middle if player1 takes a corner" <|
            \() ->
-             Expect.equal (getMove {gameState | board = (fromList ["X","","","","","","","",""]), isP1Turn = False}) 4
+             Expect.equal (getMove {gameState | board = (fromList [X,Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty]), isP1Turn = False}) 4
 
         , test "can play every possible game and win given the opportunity" <|
            \() ->
-             Expect.equal (playAllGames {gameState | board = (fromList ["X","O","X",
-                        "O","X","X",
-                        "O","",""]), isP1Turn = True} 0 ) 8
+             Expect.equal (getBestMove {gameState | board = (fromList [X,O,X,
+                        O,X,X,
+                        O,Empty,Empty]), isP1Turn = True} 0 ) 8
 
         , test "can play every possible game and blocks a possible win" <|
            \() ->
-             Expect.equal (getMove {gameState | board = (fromList ["X","X","O",
-                        "O","X","O",
-                        "","",""]), isP1Turn = False}) 8
+             Expect.equal (getMove {gameState | board = (fromList [X,X,O,
+                        O,X,O,
+                        Empty,Empty,Empty]), isP1Turn = False}) 8
       ]
