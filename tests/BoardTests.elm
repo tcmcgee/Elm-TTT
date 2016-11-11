@@ -82,6 +82,7 @@ all =
            \() ->
              Expect.equal (getCols (fromList [X,Empty,Empty,X,Empty,Empty,X,Empty,Empty] ))
                           [fromList [X,X,X],fromList [Empty,Empty,Empty],fromList [Empty,Empty,Empty]]
+                          
         , test "gets the cols in the correct order" <|
            \() ->
              Expect.equal (getCols (fromList [X,X,X,O,Empty,O,X,X,Empty] ))
